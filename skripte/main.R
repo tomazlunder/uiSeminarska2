@@ -19,7 +19,7 @@ source("customRLs/Klementina_RL1.R");
 # Distance, direction, border
 #qmat <- qlearning(c(30, 4, 5), maxtrials=1000)
 
-qmat <- qlearning(c(30, 4, 30, 4, 30, 4, 30, 4, 5, 3, 0, 0, 0))
+qmat <- qlearning(c(30, 4, 30, 4, 30, 4, 30, 4, 5, 3, 0, 0, 0), maxtrials = 10)
 
 # save(qmat, file="qmat.RData")
 # load(file="qmat.RData")
