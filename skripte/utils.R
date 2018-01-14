@@ -57,6 +57,13 @@ getPreyDirectionToNearestGrass <- function(simData, preyId)
 	getDirToNearestTile(simData, GRASS, pos)
 }
 
+getPreyDistAndDirectionToNearestGrass <- function(simData, preyId)
+{
+  pos <- getPreyPos(simData, preyId)
+  
+  getDistAndDirToNearestTile(simData, GRASSTILE, pos)
+}
+
 getAmountOfGrassNorthOfPray <- function(simData, preyId, range=MAPHEIGHT)
 {
 	pos <- getPreyPos(simData, preyId)
@@ -104,6 +111,13 @@ getPreyDirectionToNearestForest <- function(simData, preyId)
 	getDirToNearestTile(simData, FOREST, pos)
 }
 
+getPreyDistAndDirectionToNearestForest <- function(simData, preyId)
+{
+  pos <- getPreyPos(simData, preyId)
+  
+  getDistAndDirToNearestTile(simData, FOREST, pos)
+}
+
 getAmountOfForestNorthOfPray <- function(simData, preyId, range=MAPHEIGHT)
 {
 	pos <- getPreyPos(simData, preyId)
@@ -149,6 +163,13 @@ getPreyDirectionToNearestWater <- function(simData, preyId)
 	pos <- getPreyPos(simData, preyId)
 	
 	getDirToNearestTile(simData, WATER, pos)
+}
+
+getPreyDistAndDirectionToNearestWater <- function(simData, preyId)
+{
+  pos <- getPreyPos(simData, preyId)
+  
+  getDistAndDirToNearestTile(simData, WATER, pos)
 }
 
 getAmountOfWaterNorthOfPray <- function(simData, preyId, range=MAPHEIGHT)
