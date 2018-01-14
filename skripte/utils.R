@@ -146,6 +146,11 @@ getAmountOfForestWestOfPray <- function(simData, preyId, range=MAPWIDTH)
 	getNumberOfTiles(simData$map, FORESTTILE, pos, WEST, range)	
 }
 
+isPreyOnDirt <- function(simData, preyId)
+{
+  !isPreyOnGrass(simData, preyId) && !isPreyInForest(simData, preyId) && !isPreyInWater(simData, preyId)
+}
+
 isPreyInWater <- function(simData, preyId)
 {
 	simData$preys[[preyId]]$tile == WATERTILE

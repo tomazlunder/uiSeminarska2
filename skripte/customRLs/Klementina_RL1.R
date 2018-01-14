@@ -1,5 +1,5 @@
-source("skripte//simulation.R")
-source ("skripte//utils.R")
+source("..//simulation.R")
+source ("..//utils.R")
 
 # Argument dimStateSpace je vektor iste dolzine kot opisi stanj, ki jih vraca funkcija getStateDesc. 
 # Vsak element vektorja dimStateSpace doloca najvecjo vrednost, ki jo lahko zavzame istolezni element v opisu stanja.
@@ -29,7 +29,9 @@ getStateDesc <- function(simData, preyId)
 	# 2. Voda (index 2)
 	# 3. Trava (index 4)
 	# 4. Gozd (index 6)
-	vec <- c(0, 0, 0, 0, 0, 0, 0, 0)
+	# Border (index 8)
+	# HungerLevel (index 9)
+	vec <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 	
 	# PLENILEC
 	res <- getPreyDistAndDirectionToNearestPredator(simData, preyId)
@@ -63,20 +65,22 @@ getStateDesc <- function(simData, preyId)
 	vec[6] <- distance
 	vec[7] <- direction
 	
-	vec
-
 	if (pos[2] == 1)
-		border <- 1
+	  border <- 1
 	else if (pos[2] == MAPHEIGHT)
-		border <- 2
+	  border <- 2
 	else if (pos[1] == MAPWIDTH)
-		border <- 3
+	  border <- 3
 	else if (pos[1] == 1)
-		border <- 4
+	  border <- 4
 	else
-		border <- 5
-
-	c(distance, direction, border)
+	  border <- 5
+	
+	vec[8] <- border
+	vec[9] <- preyId
+	vec[10] <- simData
+	
+	vec
 }
 
 # Rezultat funkcije je nagrada (ali kazen), ki jo agent sprejme v opisani situaciji.
@@ -89,18 +93,68 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
-  predator_reward =  oldstate[1] - newstate[1] # Negativno --> agent je v newstate 
+  preyId <- newstate[9]
+  simData <- newstate[10]
+
+  # PREMIK PROTI PREDATORJU  > 0: dlje ; < 0: bližje
+  predator_reward = newstate[1] - oldstate[1]
   reward <- reward + predator_reward
   
-  if (action == 5)  # Jej / pij
-    reward <- reward + 2
+  # ODDALJENOST OD PREDATORJA
+  predator_dist <- newstate[1] - 30
+  reward <- reward + predator_dist
   
+  # AGENT NI VIDEN
+  if(isPreyHidden(simData, preyId))
+    reward <- reward + 5
   
-	reward <- (newstate[1]-30)
-
-	if (oldstate[3] == action)
-		reward <- reward - 10
-
+  # TEREN
+  if(isPreyOnDirt(simData, preyId)) # AGENT NA ZEMLJI
+    reward <- reward + 1
+  else if(isPreyOnGrass(simData, preyId)) # AGENT NA TRAVI
+    reward <- reward - 1
+  else if(isPreyInForest(simData, preyId)) # AGENT V GOZDU
+    reward <- reward - 2
+  else if(isPreyInWater(simData, preyId)) # AGENT V VODI
+    reward <- reward - 3
+  
+  # AGENT NI NA MEJI
+  if(newstate[8] == 5)
+    reward <- reward + 1
+  else if(action < 5) # AGENT NA MEJI IN NE JE/NE PIJE
+  {
+    if(action == newsate[8])  # Zaleti se v rob - je npr. na severu in spet želi proti severu
+      reward <- reward - 1
+    else
+      reward <- reward + 3
+  }
+  
+  # HRANA / PIJAČA
+  if (action == 5) 
+  {
+    if(!isPreyHungry(simData, preyId)) # ... čeprav agent ni lačen
+      reward <- reward - 3
+    else  # Agent je lačen
+      reward <- reward + 5
+  }
+  else
+  {
+    if(isPreyThirsty(simData, preyId) && newstate[2] - oldstate[2] < 0) # AGENT ŽEJEN IN BLIŽJE VODI
+      reward <- reward + 3
+    else if(isPreyThirsty(simData, preyId) && newstate[2] - oldstate[2] > 0)  # AGENT ŽEJEN IN DLJE OD VODE
+      reward <- reward - 3
+    
+    if(isPreyHungryt(simData, preyId) && newstate[4] - oldstate[4] < 0) # AGENT LAČEN IN BLIŽJE TRAVE
+      reward <- reward + 3
+    else if(isPreyHungry(simData, preyId) && newstate[4] - oldstate[4] > 0) # AGENT LAČEN IN DLJE OD TRAVE
+      reward <- reward - 3
+  }
+  
+  #if(isPreyInForest(simData, preyId))
+  #{
+  #  if(action == 1 && )
+  #}
+  
 	reward	
 }
 
