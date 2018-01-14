@@ -61,7 +61,7 @@ getPreyDistAndDirectionToNearestGrass <- function(simData, preyId)
 {
   pos <- getPreyPos(simData, preyId)
   
-  getDistAndDirToNearestTile(simData, GRASSTILE, pos)
+  getDistAndDirToNearestTile(simData, GRASS, pos)
 }
 
 getAmountOfGrassNorthOfPray <- function(simData, preyId, range=MAPHEIGHT)

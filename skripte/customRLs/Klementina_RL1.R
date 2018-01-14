@@ -1,5 +1,7 @@
-source("..//simulation.R")
-source ("..//utils.R")
+setwd("C://Users//kleme//OneDrive//Dokumenti//uiSeminarska2//skripte");
+
+source("simulation.R")
+source ("utils.R")
 
 # Argument dimStateSpace je vektor iste dolzine kot opisi stanj, ki jih vraca funkcija getStateDesc. 
 # Vsak element vektorja dimStateSpace doloca najvecjo vrednost, ki jo lahko zavzame istolezni element v opisu stanja.
@@ -35,12 +37,12 @@ getStateDesc <- function(simData, preyId)
 	  0, 0, 0, 0, 
 	  0, 0, 0, 0, 
 	  0, 0, 0, 0,
-	  0, 0)
+	  0)
 	
 	# PLENILEC
 	res <- getPreyDistAndDirectionToNearestPredator(simData, preyId)
 	distance <- max(res[1], 1) 
-	distance <- min(distance, 10)
+	distance <- min(distance, 30)
 	direction <- res[2]
 	vec[1] <- distance
 	vec[2] <- direction
@@ -48,7 +50,7 @@ getStateDesc <- function(simData, preyId)
 	# VODA
 	res <- getPreyDistAndDirectionToNearestWater(simData, preyId)
 	distance <- max(res[1], 1) 
-	distance <- min(distance, 10)
+	distance <- min(distance, 30)
 	direction <- res[2]
 	vec[3] <- distance
 	vec[4] <- direction
@@ -56,7 +58,7 @@ getStateDesc <- function(simData, preyId)
 	# TRAVA
 	res <- getPreyDistAndDirectionToNearestGrass(simData, preyId)
 	distance <- max(res[1], 1) 
-	distance <- min(distance, 10)
+	distance <- min(distance, 30)
 	direction <- res[2]
 	vec[5] <- distance
 	vec[6] <- direction
@@ -64,7 +66,7 @@ getStateDesc <- function(simData, preyId)
 	# GOZD
 	res <- getPreyDistAndDirectionToNearestForest(simData, preyId)
 	distance <- max(res[1], 1) 
-	distance <- min(distance, 10)
+	distance <- min(distance, 30)
 	direction <- res[2]
 	vec[7] <- distance
 	vec[8] <- direction
@@ -81,20 +83,19 @@ getStateDesc <- function(simData, preyId)
 	  border <- 5
 	
 	vec[9] <- border
-	vec[10] <- preyId
 	
 	if(isPreyOnDirt(simData, preyId))
-	  vec[11] <- 0
+	  vec[10] <- 0
 	else if(isPreyOnGrass(simData, preyId))
-	  vec[11] <- 1
+	  vec[10] <- 1
 	else if(isPreyInForest(simData, preyId))
-	  vec[11] <- 2
+	  vec[10] <- 2
 	else if(isPreyInWater(simData, preyId))
-	  vec[11] <- 3
+	  vec[10] <- 3
 	
-	vec[12] <- if(isPreyHidden(simData, preyId)) 0 else 1
-	vec[13] <- if(isPreyThirsty(simData, preyId)) 0 else 1
-	vec[14] <- if(isPreyHungry(simData, preyId)) 0 else 1
+	vec[11] <- 0 #if(isPreyHidden(simData, preyId)) 0 else 1
+	vec[12] <- 0 #if(isPreyThirsty(simData, preyId)) 0 else 1
+	vec[13] <- 0 #if(isPreyHungry(simData, preyId)) 0 else 1
 	
 	vec
 }
@@ -109,22 +110,21 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
-  preyId <- newstate[10]
 
   # PREMIK PROTI PREDATORJU  > 0: dlje ; < 0: bližje
   predator_reward = newstate[2] - oldstate[2]
   reward <- reward + predator_reward
   
   # ODDALJENOST OD PREDATORJA
-  predator_dist <- newstate[2] - 10
+  predator_dist <- newstate[2] - 30
   reward <- reward + predator_dist
   
   # AGENT NI VIDEN
-  if(newstate[12] == 0)
+  if(newstate[11] == 0)
     reward <- reward + 5
   
   # TEREN
-  teren <- newstate[11]
+  teren <- newstate[10]
   if(teren == 0) # AGENT NA ZEMLJI
     reward <- reward + 1
   else if(teren == 1) # AGENT NA TRAVI
@@ -146,8 +146,8 @@ getReward <- function(oldstate, action, newstate)
   }
   
   # HRANA / PIJAČA
-  isThirsty = newstate[13] == 0
-  isHungry = newstate[14] == 0
+  isThirsty = newstate[12] == 0
+  isHungry = newstate[13] == 0
   
   if (action == 5) 
   {
