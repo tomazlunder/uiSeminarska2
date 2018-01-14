@@ -110,6 +110,8 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
+  
+  reward <- 0
 
   # PREMIK PROTI PREDATORJU  > 0: dlje ; < 0: bližje
   predator_reward = newstate[2] - oldstate[2]
@@ -139,7 +141,7 @@ getReward <- function(oldstate, action, newstate)
     reward <- reward + 1
   else if(action < 5) # AGENT NA MEJI IN NE JE/NE PIJE
   {
-    if(action == newsate[9])  # Zaleti se v rob - je npr. na severu in spet želi proti severu
+    if(action == newstate[9])  # Zaleti se v rob - je npr. na severu in spet želi proti severu
       reward <- reward - 1
     else
       reward <- reward + 3

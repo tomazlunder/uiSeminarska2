@@ -818,9 +818,9 @@ qlearning <- function(dimStateSpace, gamma = 0.99, maxtrials = 1000, maxsteps = 
 	
 	#DODATEK IZ EMAILA
 	#if (ntrials %% 100 == 0) {
-	 # qmat <- Q
+	#  qmat <- Q
 	  
-	  #save(qmat, file=paste("Q", ntrials, ".RData", sep=""))
+	#  save(qmat, file=paste("Q", ntrials, ".RData", sep=""))
 	#}
 
 	Q
