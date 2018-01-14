@@ -93,9 +93,9 @@ getStateDesc <- function(simData, preyId)
 	else if(isPreyInWater(simData, preyId))
 	  vec[10] <- 3
 	
-	vec[11] <- 0 #if(isPreyHidden(simData, preyId)) 0 else 1
-	vec[12] <- 0 #if(isPreyThirsty(simData, preyId)) 0 else 1
-	vec[13] <- 0 #if(isPreyHungry(simData, preyId)) 0 else 1
+	vec[11] <- if(isPreyHidden(simData, preyId)) 0 else 1
+	vec[12] <- if(isPreyThirsty(simData, preyId)) 0 else 1
+	vec[13] <- if(isPreyHungry(simData, preyId)) 0 else 1
 	
 	vec
 }
