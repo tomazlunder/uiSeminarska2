@@ -815,6 +815,13 @@ qlearning <- function(dimStateSpace, gamma = 0.99, maxtrials = 1000, maxsteps = 
 		print(paste("trial",ntrials,"out of max",maxtrials), quote=F)
 		flush.console()
 	}
+	
+	#DODATEK IZ EMAILA
+	if (ntrials %% 100 == 0) {
+	  qmat <- Q
+	  
+	  save(qmat, file=paste("Q", ntrials, ".RData", sep=""))
+	}
 
 	Q
 }

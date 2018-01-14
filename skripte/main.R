@@ -1,4 +1,9 @@
-source("RL.R")
+setwd("E://Projects//R Studio//uiSeminarska2");
+
+
+source("skripte//RL.R");
+
+
 
 #
 # Lahko eksperimentirate z razlicnimi nastavitvami simuliranega okolja

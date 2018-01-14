@@ -1,5 +1,5 @@
 source("skripte//simulation.R")
-source ("skripte//utils.R")
+source("skripte//utils.R")
 
 # Argument dimStateSpace je vektor iste dolzine kot opisi stanj, ki jih vraca funkcija getStateDesc. 
 # Vsak element vektorja dimStateSpace doloca najvecjo vrednost, ki jo lahko zavzame istolezni element v opisu stanja.
@@ -20,28 +20,28 @@ source ("skripte//utils.R")
 
 getStateDesc <- function(simData, preyId)
 {
-	pos <- getPreyPos(simData, 1)
-	
-	getPreyInfo(simData,1)
-
-	res <- getPreyDistAndDirectionToNearestPredator(simData, preyId)
-	distance <- max(res[1], 1) 
-	distance <- min(distance, 30)
-
-	direction <- res[2]
-
-	if (pos[2] == 1)
-		border <- 1
-	else if (pos[2] == MAPHEIGHT)
-		border <- 2
-	else if (pos[1] == MAPWIDTH)
-		border <- 3
-	else if (pos[1] == 1)
-		border <- 4
-	else
-		border <- 5
-
-	c(distance, direction, border)
+  pos <- getPreyPos(simData, 1)
+  
+  getPreyInfo(simData,1)
+  
+  res <- getPreyDistAndDirectionToNearestPredator(simData, preyId)
+  distance <- max(res[1], 1) 
+  distance <- min(distance, 30)
+  
+  direction <- res[2]
+  
+  if (pos[2] == 1)
+    border <- 1
+  else if (pos[2] == MAPHEIGHT)
+    border <- 2
+  else if (pos[1] == MAPWIDTH)
+    border <- 3
+  else if (pos[1] == 1)
+    border <- 4
+  else
+    border <- 5
+  
+  c(distance, direction, border)
 }
 
 # Rezultat funkcije je nagrada (ali kazen), ki jo agent sprejme v opisani situaciji.
@@ -54,11 +54,17 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
-	reward <- (newstate[1]-30)
-
-	if (oldstate[3] == action)
-		reward <- reward - 10
-
-	reward	
+  distToNearestPredator <- newstate[1];
+  
+  #Kazen za bljižino plenilca
+  #(-29,0)
+  reward <- (distToNearestPredator-30)
+  
+  #Kazen za premik v smeri plenilca, odvisna od razdalje do plenilca. Večja je, manjša je kazen.
+  #(-29,0)
+  if (oldstate[3] == action)
+    reward <- reward - (30 - distToNearestPredator);
+  
+  reward	
 }
 
