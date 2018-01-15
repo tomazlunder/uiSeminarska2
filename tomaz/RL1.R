@@ -45,7 +45,7 @@ getStateDesc <- function(simData, preyId)
 	#[4] je lačin in na travi? (1 TRUE, 2 FALSE)
 	#[5] je žejen in na vodi? (1 TRUE, 2 FALSE)
 	
-	isHungryAndCanEat <- if(isPreyHungry(simData, preyId) && isPreyOnGrass(simData, preyId) 1 else 2;
+	isHungryAndCanEat <- if(isPreyHungry(simData, preyId) && isPreyOnGrass(simData, preyId)) 1 else 2;
 	isThirstyAndCanDrink <- if (isPreyThirsty(simData, preyId) && isPreyOnWater(simData, preyId)) 1 else 2;
 	
 	
