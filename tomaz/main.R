@@ -1,5 +1,3 @@
-source("tomaz//RL.R")
-
 #
 # Lahko eksperimentirate z razlicnimi nastavitvami simuliranega okolja
 #
@@ -21,8 +19,7 @@ source("tomaz//RL.R")
 
 #1. RL1 
 source("tomaz//RL1.R")
-qmat <- qlearning(c(30, 4, 5, 1, 1), maxtrials=1000)
-#Result after 10 simulations [1P:1P] : 304.5
+qmat <- qlearning(c(30, 4, 5, 2, 2), maxtrials=1000)
 
 
 # save(qmat, file="qmat.RData")

@@ -43,8 +43,8 @@ getStateDesc <- function(simData, preyId)
 	#[2] smer najbližjega plenilca,
 	#[3] border
 	
-	isHungry <- if(isPreyHungry(simData, preyId)) 1 else 0;
-	isThirsty <- if (isPreyThirsty(simData, preyId)) 1 else 0;
+	isHungry <- if(isPreyHungry(simData, preyId)) 1 else 2;
+	isThirsty <- if (isPreyThirsty(simData, preyId)) 1 else 2;
 
 	c(distance, direction, border, isHungry, isThirsty)
 }
