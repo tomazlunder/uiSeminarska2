@@ -42,11 +42,15 @@ getStateDesc <- function(simData, preyId)
 	#[1] razdalja do najbljižjega plenilca,
 	#[2] smer najbližjega plenilca,
 	#[3] border
+	#[4] je lačin in na travi? (1 TRUE, 2 FALSE)
+	#[5] je žejen in na vodi? (1 TRUE, 2 FALSE)
 	
-	isHungry <- if(isPreyHungry(simData, preyId)) 1 else 2;
-	isThirsty <- if (isPreyThirsty(simData, preyId)) 1 else 2;
+	isHungryAndCanEat <- if(isPreyHungry(simData, preyId) && isPreyOnGrasssimData, preyI) 1 else 2;
+	isThirstyAndCanDrink <- if (isPreyThirsty(simData, preyId) && isPreyOnWater(simData, preyI)) 1 else 2;
+	
+	
 
-	c(distance, direction, border, isHungry, isThirsty)
+	c(distance, direction, border, isHungryAndCanEat, isThirstyAndCanDrink)
 }
 
 # Rezultat funkcije je nagrada (ali kazen), ki jo agent sprejme v opisani situaciji.
@@ -64,13 +68,12 @@ getReward <- function(oldstate, action, newstate)
 
 	#PREMIK V SMERI NAJBLJIZJEGLA PLENILCA. Kazen: (0, -29)
 	#Kaznuje se relativno na razdaljo do plenilca
-	if (oldstate[3] == action)
+	if (oldstate[2] == action)
 		reward <- reward - (30 - oldstate[3]);
 	
   #AKCIJA, KI ODDALJI AGENTA OD PLENILCA JE NAGRAJENA. Nagrada: (5)
 	if (oldstate[1] < newstate[1])
-	  reward <- reward + 5
-
+	  reward <- reward + 5;
 	
 	reward	
 }
