@@ -13,14 +13,14 @@
 # v opisu stanja
 
 #0. DEFAULT 
-#source("tomaz//RL.R")
-#qmat <- qlearning(c(30, 4, 5), maxtrials=1000)
-#Result after 10 simulations [1P:1P] : 304.5
+source("tomaz//RL.R")
+qmat <- qlearning(c(30, 4, 5), maxtrials=1000)
+#Result after 100 simulations [1P:1P] : 237.5
 
 #1. RL1 
-source("tomaz//RL1.R")
-qmat <- qlearning(c(30, 4, 5, 2, 2), maxtrials=1000)
-#Result after 10 simulations [1P:1P] : 224.57
+#source("tomaz//RL1.R")
+#qmat <- qlearning(c(30, 4, 2, 2), maxtrials=1000)
+#Result after 100 simulations [1P:1P] : 305.89 
 
 
 # save(qmat, file="qmat.RData")
@@ -30,12 +30,14 @@ qmat <- qlearning(c(30, 4, 5, 2, 2), maxtrials=1000)
 
 
 #RUNNING SIMULATIONS WITH Q MATRIX
-numRuns <- 10
+numRuns <- 100
 avg <- 0
 
 for(i in c(1:numRuns)){
-  print(i);
-  avg <- avg + simulation(Q=qmat);
+  result <- simulation(Q=qmat)
+  cat("Simulacija[", i,"]: ", result, "\n")
+  
+  avg <- avg + simulation(Q=qmat)
 }
 avg <- avg/numRuns;
-print(avg)
+cat("Povprečje: ", avg, "\n")

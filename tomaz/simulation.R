@@ -524,14 +524,16 @@ simulationDraw <- function(simData, text=F)
 		textPreyInfo(simData)
 }
 
-simulation <- function(Q=NULL, maxSteps=1000, text=F)
+simulation <- function(Q=NULL, maxSteps=1000, text=F, draw = F)
 {
 	simData <- prepareSimData()
 	
 	while (simData$running)
 	{		
 		simData <- simulationStep(simData, Q)
-		simulationDraw(simData, text)
+		
+		if(draw)
+		  simulationDraw(simData, text)
  
 		if (!isSimulationAlive(simData, maxSteps))
 			break	

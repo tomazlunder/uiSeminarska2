@@ -11,13 +11,11 @@ source ("tomaz//utils.R")
 #
 # Zaradi hitrosti in zanesljivosti ucenja je zazeleno, da je razlicnih stanj cim manj!
 
-#
-# V tem primeru (nepopolnem) je v stanje zakodirana:
-# - razdalja do najblizjega plenilca (navzgor omejena na 30), 
-# - smer v kateri se nahaja ta plenilec in 
-# - ali se agent nahaja na robu mape (vrednosti 1-4 ozna?ujejo ustrezne robove, vrednost 5 pa, da agent ni na robu)
-#
 
+#[1] razdalja do najbljižjega plenilca,
+#[2] smer najbližjega plenilca,
+#[3] je lačin in na travi? (1 TRUE, 2 FALSE)
+#[4] je žejen in na vodi? (1 TRUE, 2 FALSE)
 getStateDesc <- function(simData, preyId)
 {
 	pos <- getPreyPos(simData, 1)
@@ -39,27 +37,16 @@ getStateDesc <- function(simData, preyId)
 	else
 		border <- 5
 
-	#[1] razdalja do najbljižjega plenilca,
-	#[2] smer najbližjega plenilca,
-	#[3] border
-	#[4] je lačin in na travi? (1 TRUE, 2 FALSE)
-	#[5] je žejen in na vodi? (1 TRUE, 2 FALSE)
-	
 	isHungryAndCanEat <- if(isPreyHungry(simData, preyId) && isPreyOnGrass(simData, preyId)) 1 else 2;
 	isThirstyAndCanDrink <- if (isPreyThirsty(simData, preyId) && isPreyInWater(simData, preyId)) 1 else 2;
 	
 	
 
-	c(distance, direction, border, isHungryAndCanEat, isThirstyAndCanDrink)
+	c(distance, direction, isHungryAndCanEat, isThirstyAndCanDrink)
 }
 
 # Rezultat funkcije je nagrada (ali kazen), ki jo agent sprejme v opisani situaciji.
 # Nagrada mora spodbujati agenta, da izvaja koristne akcije oziroma ga odvracati od negativnih akcij
-
-#
-# V tem primeru (nepopolnem) je nagrada definirana kot razdalja do najblizjega plenilca.
-# Kaznuje se tudi akcija, ki premakne agenta v smeri najblizjega plenilca. 
-#
 
 getReward <- function(oldstate, action, newstate)
 {
@@ -78,11 +65,11 @@ getReward <- function(oldstate, action, newstate)
 	safeConsumeDistance <- 8;
 	
 	#Plenilec dlje od safeConsumeDistance, na travi, lačein in je. Nagrada: (5)
-	if (oldstate[1] > safeConsumeDistance && oldstate[4] == 1 && action == 5)
+	if (oldstate[1] > safeConsumeDistance && oldstate[3] == 1 && action == 5)
 	  reward <- reward + 5;
 	
 	#Plenilec dlje od safeConsumeDistance, v vodi, žejen in pije. Nagrada: (5)
-	if (oldstate[1] > safeConsumeDistance && oldstate[5] == 1&& action == 5)
+	if (oldstate[1] > safeConsumeDistance && oldstate[4] == 1 && action == 5)
 	  reward <- reward + 5;
 	
 	reward	
