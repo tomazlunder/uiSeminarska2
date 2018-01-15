@@ -15,12 +15,12 @@
 #0. DEFAULT 
 #source("tomaz//RL.R")
 #qmat <- qlearning(c(30, 4, 5), maxtrials=1000)
-#Result after 100 simulations [1P:1P] : 237.5
+#Result after 1000 simulations [1P:1P] : 298.709 
 
 #1. RL1 
 #source("tomaz//RL1.R")
 #qmat <- qlearning(c(30, 4, 2, 2), maxtrials=1000)
-#Result after 100 simulations [1P:1P] : 305.89 
+#Result after 1000 simulations [1P:1P] : 305.208  
 
 #1. RL2
 #source("tomaz//RL2.R")
@@ -33,9 +33,9 @@
 #Result after 1000 simulations [1P:1P] : 325.292
 
 #1. RL4
-source("tomaz//RL4.R")
-qmat <- qlearning(c(30, 4, 2, 4), maxtrials=1000)
-#Result after 1000 simulations [1P:1P] :367.89
+#source("tomaz//RL4.R")
+#qmat <- qlearning(c(30, 4, 2, 4), maxtrials=1000)
+#Result after 1000 simulations [1P:1P] : 367.89
 
 
 # save(qmat, file="qmat.RData")
