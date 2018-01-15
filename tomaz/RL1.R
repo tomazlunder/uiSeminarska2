@@ -50,25 +50,23 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
-  #RAZDALJA DO NAJBLJIZJEGA PLENILCA. Kazen: (0,-29)
+  #RAZDALJA DO NAJBLIŽJEGA PLENILCA [0, -29].
 	reward <- (newstate[1]-30)
 
-	#PREMIK V SMERI NAJBLJIZJEGLA PLENILCA. Kazen: (0, -29)
-	#Kaznuje se relativno na razdaljo do plenilca
+	#PREMIK V SMERI NAJBLJIZJEGLA PLENILCA (Kazen odvisna od razdalje) [0, -29].
 	if (oldstate[2] == action)
 		reward <- reward - (30 - oldstate[3]);
 	
-  #AKCIJA, KI ODDALJI AGENTA OD PLENILCA JE NAGRAJENA. Nagrada: (5)
+  #PREMIK, KI ODDALJI PLEN OD PLENILCA JE NAGRAJEN [5].
 	if (oldstate[1] < newstate[1])
 	  reward <- reward + 5;
 	
+	#AGENT, KI JE NA VARNI RAZDALJI, LAČEN, NA TRAVI IN JE, JE NAGRAJEN [5];
 	safeConsumeDistance <- 8;
-	
-	#Plenilec dlje od safeConsumeDistance, na travi, lačein in je. Nagrada: (5)
 	if (oldstate[1] > safeConsumeDistance && oldstate[3] == 1 && action == 5)
 	  reward <- reward + 5;
 	
-	#Plenilec dlje od safeConsumeDistance, v vodi, žejen in pije. Nagrada: (5)
+	#AGENT, KI JE NA VARNI RAZDALJI, ŽEJEN, V VODI IN PIJE, JE NAGRAJEN [5].
 	if (oldstate[1] > safeConsumeDistance && oldstate[4] == 1 && action == 5)
 	  reward <- reward + 5;
 	

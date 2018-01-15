@@ -34,8 +34,8 @@
 
 #1. RL4
 source("tomaz//RL4.R")
-qmat <- qlearning(c(30, 4, 2), maxtrials=1000)
-#Result after 1000 simulations [1P:1P] : 
+qmat <- qlearning(c(30, 4, 2, 4), maxtrials=1000)
+#Result after 1000 simulations [1P:1P] :367.89
 
 
 # save(qmat, file="qmat.RData")

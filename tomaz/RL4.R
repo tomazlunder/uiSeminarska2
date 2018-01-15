@@ -15,6 +15,7 @@ source ("tomaz//utils.R")
 #[1] razdalja do najbljižjega plenilca,
 #[2] smer najbližjega plenilca,
 #[3] je lačin in na travi ALI je žejen in na vodi? (1 TRUE, 2 FALSE)
+#[4] je skrit? (1 TRUE, 2 FALSE)
 getStateDesc <- function(simData, preyId)
 {
   pos <- getPreyPos(simData, 1)
@@ -40,9 +41,9 @@ getStateDesc <- function(simData, preyId)
   isThirstyAndCanDrink <- (isPreyThirsty(simData, preyId) && isPreyInWater(simData, preyId))
   isHungryOrThirstyAndCanConsume <- if (isHungryAndCanEat || isThirstyAndCanDrink) 1 else 2
   
+  isHidden <- if (isPreyHidden(simData, preyId)) 1 else 2;
   
-  
-  c(distance, direction, isHungryOrThirstyAndCanConsume)
+  c(distance, direction, isHungryOrThirstyAndCanConsume, isHidden)
 }
 
 # Rezultat funkcije je nagrada (ali kazen), ki jo agent sprejme v opisani situaciji.
@@ -50,32 +51,39 @@ getStateDesc <- function(simData, preyId)
 
 getReward <- function(oldstate, action, newstate)
 {
-  #RAZDALJA DO NAJBLJIZJEGA PLENILCA. Kazen: (0,-29)
+  reward <- 0
+  
+  #RAZDALJA DO NAJBLJIZJEGA PLENILCA [0,-29].
   reward <- (newstate[1]-30)
   
-  #PREMIK V SMERI NAJBLJIZJEGLA PLENILCA. Kazen: (0, -29)
-  #Kaznuje se relativno na razdaljo do plenilca
-  if (oldstate[2] == action)
-    reward <- reward - (30 - oldstate[3]);
+  #HRANJENJE IN PITJE [10/25].
+  #Večja nagrada, če je lačen/žejen in na primernem tile-u
+  if(action == 5){
+    if(oldstate[3] == 1){
+      reward <- reward + 25;
+    } else {
+      reward <- reward + 10;
+    }
+  }
   
-  #AKCIJA, KI ODDALJI AGENTA OD PLENILCA JE NAGRAJENA. Nagrada: (10)
-  if (oldstate[1] < newstate[1])
-    reward <- reward + 10;
-  
-  safeConsumeDistance <- 8;
-  
-  #Plenilec dlje od safeConsumeDistance, na travi/vodi , lačen/žejen in in je/pije. Nagrada: (50)
-  if (oldstate[1] > safeConsumeDistance && oldstate[3] == 1 && action == 5)
+  #PREDATOR JE BLIZU, AGENT SE SKRIJE [50].
+  if(oldstate[1] < 5 && oldstate[4] == 2 && newstate[4] == 1){
     reward <- reward + 50;
+  }
   
-  #Ko je plenilec zelo blizu agenta (dangerZone) se akcije, ki zmanjšajo razdaljo med njima zelo kaznujejo (100)
-  dangerZone <- 5;
-  if (oldstate[1] < dangerZone){
+  #PREDATOR JE BLIZU, AGENT SE MU PRIBLJIŽA [-100].
+  if (oldstate[1] < 5){
     if(newstate[1] < oldstate[1]){
       reward <- reward - 100;
     }
   }
   
+  #PREDATOR JE BLIZU, AGENT SE ODDALJI [30]
+  if (oldstate[1] < 5){
+    if(newstate[1] > oldstate[1]){
+      reward <- reward + 30;
+    }
+  }
   
   reward
 }
