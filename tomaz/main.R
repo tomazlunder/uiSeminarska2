@@ -28,7 +28,12 @@
 #Result after 1000 simulations [1P:1P] : 302.54
 
 #1. RL3
-source("tomaz//RL3.R")
+#source("tomaz//RL3.R")
+#qmat <- qlearning(c(30, 4, 2), maxtrials=1000)
+#Result after 1000 simulations [1P:1P] : 325.292
+
+#1. RL4
+source("tomaz//RL4.R")
 qmat <- qlearning(c(30, 4, 2), maxtrials=1000)
 #Result after 1000 simulations [1P:1P] : 
 
