@@ -75,6 +75,16 @@ getReward <- function(oldstate, action, newstate)
 	if (oldstate[1] < newstate[1])
 	  reward <- reward + 5;
 	
+	safeConsumeDistance <- 8;
+	
+	#Plenilec dlje od safeConsumeDistance, na travi, lačein in je. Nagrada: (5)
+	if (oldstate[1] > safeConsumeDistance && oldstate[4] == 1 && action == 5)
+	  reward <- reward + 5;
+	
+	#Plenilec dlje od safeConsumeDistance, v vodi, žejen in pije. Nagrada: (5)
+	if (oldstate[1] > safeConsumeDistance && oldstate[5] == 1&& action == 5)
+	  reward <- reward + 5;
+	
 	reward	
 }
 

@@ -30,7 +30,7 @@ qmat <- qlearning(c(30, 4, 5, 2, 2), maxtrials=1000)
 
 
 #RUNNING SIMULATIONS WITH Q MATRIX
-numRuns <- 100
+numRuns <- 10
 avg <- 0
 
 for(i in c(1:numRuns)){
